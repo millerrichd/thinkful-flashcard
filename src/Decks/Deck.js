@@ -19,7 +19,7 @@ function Deck() {
     return () => {
       console.log("cleanup inside Deck");
     }
-  }, [])
+  }, [deckId])
   
   const handleDeleteDeck = async (id) => {
     const result = window.confirm("Delete this deck?\n\nYou will not be able to recover it.");
@@ -47,7 +47,7 @@ function Deck() {
             <Link className="btn btn-primary mx-1" to={`/decks/${deckId}/study`}>Study</Link>
             <Link className="btn btn-primary ml-1" to={`/decks/${deckId}/cards/new`}>Add Cards</Link>
           </div>
-          <a className="btn btn-danger" href="#" onClick={() => handleDeleteDeck(deck.id)}>Delete</a>
+          <Link className="btn btn-danger" to="#" onClick={() => handleDeleteDeck(deck.id)}>Delete</Link>
         </div>
         <h2 className="mt-4">Cards</h2>
         <Cards cards={deck.cards}/>

@@ -1,36 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 
-import { readDeck } from "../utils/api";
+import { createDeck, readDeck, updateDeck } from "../utils/api";
 
 function ModifyDeck() {
-  const [deck, setDeck] = useState({})
+  const initialDeck = {
+    name: "Enter Name",
+    description: "Enter Description"
+  }
+  const [formData, setFormData] = useState({})
+  
   const {deckId} = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     if(deckId) {
-      setDeck([]);
+      setFormData({});
       async function GetDeck() {
         const data = await readDeck(deckId);
-        setDeck(data);
+        setFormData(data);
       }
       GetDeck();
       return () => {
         console.log("cleanup inside Deck");
       }
     }
-  }, [])
+  }, [deckId])
 
-  const handleChange = () => {
-
+  const handleChange = ({target}) => {
+    setFormData({ ...formData, [target.name]: target.value})
   }
 
   const handleCancel = () => {
-    console.log("Hi I'm Cancel");
+    if(deckId) {
+      history.push(`/decks/${deckId}`)
+    } else {
+      history.push("/");
+    }
   }
 
-  const handleSubmit = () => {
-    console.log("Hi I'm Submit");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if(deckId) {
+      await updateDeck(formData)
+      setFormData({...initialDeck})
+      history.push(`/decks/${deckId}`)
+    } else {
+      await createDeck(formData)
+      setFormData({...initialDeck})
+      history.push("/");
+    }
   }
 
   return (
@@ -40,7 +59,7 @@ function ModifyDeck() {
             <li className="breadcrumb-item"><Link to="/">Home</Link></li>
             { deckId ? (
               <>
-                <li className="breadcrumb-item"><Link to={`/decks/${deck.id}`}>{deck.name}</Link></li>
+                <li className="breadcrumb-item"><Link to={`/decks/${formData.id}`}>{formData.name}</Link></li>
                 <li className="breadcrumb-item active" aria-current="page">Edit Deck</li>
               </>
             ) : (
@@ -51,11 +70,11 @@ function ModifyDeck() {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
-          <input type="text" className="form-control" id="name" />
+          <input className="form-control" id="name" type="text" name="name" onChange={handleChange} value={formData.name}/>
         </div>
         <div className="form-group">
           <label htmlFor="description">Description</label>
-          <textarea className="form-control" id="description" rows="5"/>
+          <textarea className="form-control" id="description" name="description" rows="5" onChange={handleChange} value={formData.description}/>
         </div>
         <button type="reset" className="btn btn-secondary mr-1" onClick={handleCancel}>Cancel</button>
         <button type="submit" className="btn btn-primary ml-1">Submit</button>
