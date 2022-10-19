@@ -24,7 +24,7 @@ function Study() {
     GetDeck();
     return () => {
     }
-  }, [deckId])
+  }, [deckId, currentIndex])
 
   const handleFlip = () => {
     setFrontSide(!frontSide);
@@ -61,11 +61,11 @@ function Study() {
           <h2>Study: {deck.name}</h2>
         </div>
         { cardsLength < 3 ? (
-          <div>
+          <>
             <h3>Not enough cards.</h3>
             <p>You need at least 3 cards to study. There are {cardsLength} in this deck.</p>
             <Link className="btn btn-primary ml-1" to={`/decks/${deckId}/cards/new`}>Add Cards</Link>
-          </div>
+          </>
         ) : (
           <div className="card">
             <div className="card-body">
