@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 
-import { readDeck } from "../utils/api"
+import { readDeck, deleteDeck } from "../utils/api"
 import Cards from "../Cards/Cards";
 
 function Deck() {
   const [ deck, setDeck ] = useState([]);
 
   const {deckId} = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     setDeck([]);
@@ -17,14 +18,14 @@ function Deck() {
     }
     GetDeck();
     return () => {
-      console.log("cleanup inside Deck");
     }
   }, [deckId])
   
   const handleDeleteDeck = async (id) => {
     const result = window.confirm("Delete this deck?\n\nYou will not be able to recover it.");
     if(result) {
-      console.log(`!!! TODO !!! Delete Deck: ${id}`);
+      await deleteDeck(id);
+      history.push("/");
     }
   };
 

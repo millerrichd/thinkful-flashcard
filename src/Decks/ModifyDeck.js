@@ -4,11 +4,8 @@ import { Link, useParams, useHistory } from "react-router-dom";
 import { createDeck, readDeck, updateDeck } from "../utils/api";
 
 function ModifyDeck() {
-  const initialDeck = {
-    name: "Enter Name",
-    description: "Enter Description"
-  }
-  const [formData, setFormData] = useState({})
+  const initialForm = {name: "", description: ""};
+  const [formData, setFormData] = useState(initialForm)
   
   const {deckId} = useParams();
   const history = useHistory();
@@ -22,7 +19,6 @@ function ModifyDeck() {
       }
       GetDeck();
       return () => {
-        console.log("cleanup inside Deck");
       }
     }
   }, [deckId])
@@ -43,30 +39,30 @@ function ModifyDeck() {
     event.preventDefault();
     if(deckId) {
       await updateDeck(formData)
-      setFormData({...initialDeck})
+      setFormData(initialForm)
       history.push(`/decks/${deckId}`)
     } else {
       await createDeck(formData)
-      setFormData({...initialDeck})
+      setFormData(initialForm)
       history.push("/");
     }
   }
 
   return (
     <>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-            { deckId ? (
-              <>
-                <li className="breadcrumb-item"><Link to={`/decks/${formData.id}`}>{formData.name}</Link></li>
-                <li className="breadcrumb-item active" aria-current="page">Edit Deck</li>
-              </>
-            ) : (
-              <li className="breadcrumb-item active" aria-current="page">Create Deck</li>
-            )}
-          </ol>
-        </nav>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+          { deckId ? (
+            <>
+              <li className="breadcrumb-item"><Link to={`/decks/${formData.id}`}>{formData.name}</Link></li>
+              <li className="breadcrumb-item active" aria-current="page">Edit Deck</li>
+            </>
+          ) : (
+            <li className="breadcrumb-item active" aria-current="page">Create Deck</li>
+          )}
+        </ol>
+      </nav>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name</label>

@@ -6,6 +6,8 @@ import NotFound from "./NotFound";
 import Decks from "../Decks/Decks";
 import Deck from "../Decks/Deck";
 import ModifyDeck from "../Decks/ModifyDeck";
+import ModifyCard from "../Cards/ModifyCard";
+import Study from "../Decks/Study";
 
 function Layout() {
   return (
@@ -16,6 +18,12 @@ function Layout() {
           <Route exact path="/">
             <Decks/>
           </Route>
+          <Route path="/decks/:deckId/cards/:cardId/edit">
+            <ModifyCard />
+          </Route>
+          <Route path="/decks/:deckId/cards/new">
+            <ModifyCard />
+          </Route>
           <Route path="/decks/new">
             <ModifyDeck />
           </Route>
@@ -23,7 +31,7 @@ function Layout() {
             <ModifyDeck />
           </Route>
           <Route path="/decks/:deckId/study">
-            <p>Study??</p>
+            <Study />
           </Route>
           <Route path="/decks/:deckId">
             <Deck />

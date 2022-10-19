@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-import { listDecks } from "../utils/api";
+import { listDecks, deleteDeck } from "../utils/api";
 
 function Decks() {
   const [decks, setDecks] = useState([])
+
+  const history = useHistory();
 
   useEffect(() => {
     setDecks([]);
@@ -15,14 +17,14 @@ function Decks() {
     }
     getDecks();
     return () => {
-      console.log("cleanup called, but nothing to do yet...");
     }
   }, [])
 
   const handleDeleteDeck = async (id) => {
     const result = window.confirm("Delete this deck?\n\nYou will not be able to recover it.");
     if(result) {
-      console.log(`!!! TODO !!! Delete Deck: ${id}`);
+      await deleteDeck(id);
+      history.go(0);
     }
   };
 
@@ -33,7 +35,10 @@ function Decks() {
         {decks.map((deck) => (
           <div className="card" key={deck.id}>
             <div className="card-body">
-              <h5 className="card-title">{deck.name}</h5>
+              <div className="d-flex justify-content-between">
+                <h5 className="card-title">{deck.name}</h5>
+                <p>{deck.cards.length} cards</p>
+              </div>
               <p className="card-text">{deck.description}</p>
               <div className="d-flex justify-content-between">
                 <div>
