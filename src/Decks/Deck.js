@@ -10,6 +10,7 @@ function Deck() {
   const {deckId} = useParams();
   const history = useHistory();
 
+  //get the current deck
   useEffect(() => {
     setDeck([]);
     async function GetDeck() {
@@ -21,6 +22,7 @@ function Deck() {
     }
   }, [deckId])
   
+  //delete the deck
   const handleDeleteDeck = async (id) => {
     const result = window.confirm("Delete this deck?\n\nYou will not be able to recover it.");
     if(result) {

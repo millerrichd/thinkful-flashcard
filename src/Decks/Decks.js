@@ -8,6 +8,7 @@ function Decks() {
 
   const history = useHistory();
 
+  //get all the decks
   useEffect(() => {
     setDecks([]);
 
@@ -20,6 +21,7 @@ function Decks() {
     }
   }, [])
 
+  //delete a selected deck
   const handleDeleteDeck = async (id) => {
     const result = window.confirm("Delete this deck?\n\nYou will not be able to recover it.");
     if(result) {

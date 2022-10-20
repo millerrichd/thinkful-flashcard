@@ -13,23 +13,26 @@ function Study() {
   const {deckId} = useParams();
   const history = useHistory();
 
+  //get the deck to get all the cards
   useEffect(() => {
     setDeck([]);
     async function GetDeck() {
       const data = await readDeck(deckId);
       setDeck(data);
-      setCurrentCard(data.cards[currentIndex]);
+      setCurrentCard(data.cards[0]);
       setCardsLength(data.cards.length);
     }
     GetDeck();
     return () => {
     }
-  }, [deckId, currentIndex])
+  }, [deckId])
 
+  //flip the side of the card
   const handleFlip = () => {
     setFrontSide(!frontSide);
   }
 
+  //handle the next button, and when next on the last card reset prompt
   const handleNext = () => {
     if(currentIndex === (cardsLength - 1)) {
       const result = window.confirm("Restart?\n\nClick 'cancel' to return to the home page.");

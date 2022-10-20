@@ -11,6 +11,7 @@ function ModifyCard() {
   const {deckId, cardId} = useParams();
   const history = useHistory();
 
+  //get the current deck to get information about the deck name
   useEffect(() => {
     if(deckId) {
       setDeck({});
@@ -24,6 +25,7 @@ function ModifyCard() {
     }
   }, [deckId])
 
+  //get the current card
   useEffect(() => {
     if(cardId) {
       setFormData({});
@@ -37,29 +39,26 @@ function ModifyCard() {
     }
   }, [cardId])
 
-
+  //catch the change to the component
   const handleChange = ({target}) => {
     setFormData({ ...formData, [target.name]: target.value})
   }
 
+  //handle cancel to return to the decks/:deckId
   const handleCancel = () => {
     history.push(`/decks/${deckId}`);
   }
 
+  //handle submit of the card, whether it is a edit or new  
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Hi I'm Card Submit")
     if(cardId) {
-      console.log("inside update");
       await updateCard(formData)
       setFormData(initialForm)
       history.push(`/decks/${deckId}`);
     } else {
-      console.log("inside create");
       await createCard(deckId, formData)
-      console.log("before form reset");
       setFormData(initialForm)
-      console.log("after form reset");
     }
   }
 

@@ -6,7 +6,8 @@ import { deleteCard } from "../utils/api";
 function Cards({cards = []}) {
   const history = useHistory();
 
-  const handleDeleteDeck = async (id) => {
+  // delete the the selected card
+  const handleDeleteCard = async (id) => {
     const result = window.confirm("Delete this card?\n\nYou will not be able to recover it.");
     if(result) {
       await deleteCard(id);
@@ -26,7 +27,7 @@ function Cards({cards = []}) {
               </div>
               <div className="d-flex justify-content-end">
                 <Link className="btn btn-secondary mr-1" to={`/decks/${card.deckId}/cards/${card.id}/edit`}>Edit</Link>
-                <Link className="btn btn-danger ml-1" to="#" onClick={() => handleDeleteDeck(card.id)}>Delete</Link>
+                <Link className="btn btn-danger ml-1" to="#" onClick={() => handleDeleteCard(card.id)}>Delete</Link>
               </div>
             </div>
           </div>
